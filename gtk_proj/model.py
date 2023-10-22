@@ -9,3 +9,7 @@ class PlotData:
 
     def __iter__(self):
         return iter([self._x, self._y])
+
+    @property
+    def x(self):
+        return self._x

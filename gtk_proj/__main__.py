@@ -9,7 +9,7 @@ from .widgets import Window
 class Application(Gtk.Application):
     def on_activate(self, _):
         win = Window(application=self)
-        win.set_default_size(800, 800)
+        win.set_default_size(1300, 800)
         win.set_title("Embedding in GTK4")
         win.set_visible(True)
         self.win = win
@@ -18,12 +18,5 @@ class Application(Gtk.Application):
 
 app = Application(application_id='org.matplotlib.examples.EmbeddingInGTK4')
 app.connect('activate', app.on_activate)
-
-
-def monkeypatch():
-    print('haha')
-
-
-app.monkeypatch = monkeypatch
 
 app.run(None)
