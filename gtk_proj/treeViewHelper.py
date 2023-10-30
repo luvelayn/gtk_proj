@@ -16,5 +16,12 @@ class TreeViewHelper:
             if isinstance(value, dict):
                 item = self.store.append(parent, [key, ''])
                 self._fill_treeview(item, value)
+            elif isinstance(value, list):
+                item = self.store.append(parent, [key, ''])
+                number = 1
+                for i in value:
+                    data = {str(number): i}
+                    self._fill_treeview(item, data)
+                    number += 1
             else:
                 self.store.append(parent, [key, str(value)])

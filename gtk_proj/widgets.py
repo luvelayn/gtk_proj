@@ -1,10 +1,11 @@
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk
 from matplotlib.backends.backend_gtk4agg import FigureCanvasGTK4Agg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
 import numpy as np
 from .model import PlotData
-from .tree import TreeViewHelper
+from .treeViewHelper import TreeViewHelper
+from .cache import get_last_tab, save_last_tab
 
 
 class Notebook(Gtk.Notebook):
@@ -135,21 +136,27 @@ class Window(Gtk.ApplicationWindow):
         self.notebook.append_page(plot_tab, Gtk.Label.new("График"))
         self.notebook.append_page(tree_tab, Gtk.Label.new("Дерево"))
 
-        self.load_last_tab()
+        self.restore_last_tab()
+
         self.set_child(self.notebook)
 
-    def save_current_tab(self):
-        current_tab = self.notebook.get_current_page()
-        with open('./user_cache_dir/last_tab_info.txt', 'w') as config_file:
-            config_file.write(str(current_tab))
+    def restore_last_tab(self):
+        last_tab = get_last_tab()
+        if last_tab is not None:
+            self.notebook.set_current_page(last_tab)
 
-    def load_last_tab(self):
-        try:
-            with open('./user_cache_dir/last_tab_info.txt', 'r') as config_file:
-                last_tab = int(config_file.read())
-                self.notebook.set_current_page(last_tab)
-        except FileNotFoundError:
-            pass
+    # def save_current_tab(self):
+    #     current_tab = self.notebook.get_current_page()
+    #     with open('./user_cache_dir/last_tab_info.txt', 'w') as config_file:
+    #         config_file.write(str(current_tab))
+    #
+    # def load_last_tab(self):
+    #     try:
+    #         with open('./user_cache_dir/last_tab_info.txt', 'r') as config_file:
+    #             last_tab = int(config_file.read())
+    #             self.notebook.set_current_page(last_tab)
+    #     except FileNotFoundError:
+    #         pass
 
     def handle_exit(self, _):
         dialog = Confirmation()
@@ -160,6 +167,7 @@ class Window(Gtk.ApplicationWindow):
 
     def exit(self, widget, response):
         if response == 1:
-            self.save_current_tab()
+            last_tab = self.notebook.get_current_page()
+            save_last_tab(last_tab)
             self.app.quit()
         widget.destroy()
