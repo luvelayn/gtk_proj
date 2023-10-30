@@ -145,19 +145,6 @@ class Window(Gtk.ApplicationWindow):
         if last_tab is not None:
             self.notebook.set_current_page(last_tab)
 
-    # def save_current_tab(self):
-    #     current_tab = self.notebook.get_current_page()
-    #     with open('./user_cache_dir/last_tab_info.txt', 'w') as config_file:
-    #         config_file.write(str(current_tab))
-    #
-    # def load_last_tab(self):
-    #     try:
-    #         with open('./user_cache_dir/last_tab_info.txt', 'r') as config_file:
-    #             last_tab = int(config_file.read())
-    #             self.notebook.set_current_page(last_tab)
-    #     except FileNotFoundError:
-    #         pass
-
     def handle_exit(self, _):
         dialog = Confirmation()
         dialog.set_transient_for(self)
